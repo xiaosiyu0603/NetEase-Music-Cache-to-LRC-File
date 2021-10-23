@@ -5,6 +5,9 @@ import json
 from pprint import pprint
 
 
+ROMALRC_ENABLE = False
+
+
 if __name__ == "__main__":
     cwd = os.getcwd()
     print(sys.argv[1:])
@@ -32,10 +35,11 @@ if __name__ == "__main__":
         except KeyError:
             str_tlyric = None
 
-        try:
-            str_romalrc = jsonobj["romalrc"]["lyric"]
-        except KeyError:
-            str_romalrc = None
+        if ROMALRC_ENABLE:
+            try:
+                str_romalrc = jsonobj["romalrc"]["lyric"]
+            except KeyError:
+                str_romalrc = None
 
         with open(outputfilename, 'w', encoding="utf-8") as fp:
             if lrcstr is not None:
@@ -44,8 +48,9 @@ if __name__ == "__main__":
             if str_tlyric is not None:
                 fp.write(str_tlyric)
                 fp.write("\n")
-            if str_romalrc is not None:
-                fp.write(str_romalrc)
-                fp.write("\n")
+            if ROMALRC_ENABLE:
+                if str_romalrc is not None:
+                    fp.write(str_romalrc)
+                    fp.write("\n")
 
     os.system('pause')
